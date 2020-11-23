@@ -15,7 +15,7 @@
 <script>
 export default {
   name: "Clock",
-  data () {
+  data() {
     return {
       clockHours: 0,
       clockMinutes: 0,
@@ -24,10 +24,10 @@ export default {
   },
   mounted() {
     this.getTime();
-    setInterval(this.getTime,1000);
+    setInterval(this.getTime, 1000);
   },
   methods: {
-    getTime () {
+    getTime() {
       let time = new Date();
       this.clockHours = time.getHours();
       this.clockMinutes = time.getMinutes();
@@ -38,10 +38,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .container {
-    font-size: 36px;
-    font-family: monospace;
-    color: var(--white-text);
-    padding: 32px 0;
-  }
+.container {
+  font-size: 36px;
+  font-family: monospace;
+  color: var(--white-text);
+  padding: 32px 0;
+}
 </style>

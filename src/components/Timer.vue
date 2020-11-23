@@ -1,14 +1,17 @@
 <template>
   <div class="container">
-    <div class="timer-input-field" v-if="isSubmitted < 0">
+    <div class="timer-input-field" v-if="!countDownActive">
       <input type="text" class="time-input" v-model="timerHours"> Hours
       <input type="text" class="time-input" v-model="timerMinutes"> Minutes
       <input type="text" class="time-input" v-model="timerSeconds"> Seconds
+      <br><br><input type="submit" class="timer-submit" @click="startCountDown">
     </div>
-    <div class="timer-display" v-if="isSubmitted > 0">
+    <div class="timer-display" v-if="countDownActive">
       <span>{{ timerHours }}:</span><span>{{ timerMinutes }}:</span><span>{{ timerSeconds }}</span>
     </div>
-    <br><br><input type="submit" class="timer-submit" @click="submitTime">
+    <div class="alert" v-if="isOver">
+      TIMER END
+    </div>
   </div>
 </template>
 
@@ -20,27 +23,46 @@ export default {
       timerHours: 0,
       timerMinutes: 0,
       timerSeconds: 0,
-      isSubmitted: -1,
-      seconds: 0,
+      countDownActive: false,
+      isOver: false,
+      totalTime: 0,
+      intervalID: 0,
     }
   },
   mounted() {
   },
-  // methods: {
-  //   submitTime() {
-  //     this.isSubmitted *= -1;
-  //     setInterval(this.countDown, 1000);
-  //   },
-  //   countDown() {
-  //     let countDownTime = new Date("Nov 7, 2020, " + this.timerHours + ":" + this.timerMinutes + ":" + this.timerSeconds).getTime();
-  //     let currentTime = new Date().getTime();
-  //
-  //     let timeDifference = currentTime - countDownTime;
-  //
-  //     this.timerHours = Math.abs(Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-  //     this.timerMinutes = Math.abs(Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60)));
-  //     this.timerSeconds = Math.abs(Math.floor((timeDifference % (1000 * 60)) / 1000));
-  //   }
+  methods: {
+    startCountDown() {
+      this.countDownActive = !this.countDownActive;
+      this.intervalID = setInterval(this.updateCountDown, 1000);
+      this.isOver = false;
+    },
+    updateCountDown() {
+      this.timerSeconds--;
+      if (this.timerSeconds === -1) {
+        this.timerSeconds = 59;
+        this.timerMinutes--;
+      }
+      if (this.timerMinutes === -1) {
+        this.timerMinutes = 59;
+        this.timerHours--;
+      }
+      if (this.timerHours < 0) {
+        setTimeout(() => {
+          this.isOver = false;
+        }, 3000);
+        this.isOver = true;
+        this.stopCountDown();
+      }
+    },
+    stopCountDown() {
+      this.countDownActive = !this.countDownActive;
+      clearInterval(this.intervalID);
+      this.timerSeconds = 0;
+      this.timerMinutes = 0;
+      this.timerHours = 0;
+    },
+  }
   // }
 }
 </script>

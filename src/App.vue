@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <clock />
+    <clock/>
     <hr>
-    <elapser />
+    <elapser/>
     <hr>
-    <timer />
+    <timer/>
   </div>
 </template>
 
